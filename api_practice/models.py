@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 # Create your models here.
 class Catagory(models.Model):
     class ProductType(models.TextChoices):
@@ -23,5 +23,4 @@ class Product(models.Model):
         return self.name
     
 
-class Person():
-    pass
+
