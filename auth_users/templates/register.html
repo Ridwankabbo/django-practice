@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h2>Registratio</h2>
+
+        <form action="{% url "register-user" %}" method = "post">
+            {% csrf_token %}
+            <div>
+                {{ form.username }}
+            </div>
+            <div>
+                {{form.email}}
+            </div>
+            <div>
+                {{form.password}}
+            </div>
+            <button type="submit">Save</button>
+        </form>
+
+    </div>
+</body>
+</html>

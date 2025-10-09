@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
 from .serializer import UserSerializer
 from .models import User
+from .forms import UserRegistrationForm
 # Create your views here.
 
 
@@ -16,3 +17,19 @@ class UsersApi(APIView):
         
         return Response(serializer.data)
 
+def UserRegistration(request):
+    
+    if request.method == "POST":
+        user_registraton = UserRegistrationForm(request.POST)
+    
+        if user_registraton.is_valid():
+            user_registraton.save()
+        
+            return redirect("all-users")
+        
+    else:
+        user_registraton = UserRegistrationForm()
+        
+        return render(request, "register.html", {"form": user_registraton})
+    
+    
