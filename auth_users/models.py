@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+import random
 # Create your models here.
 class CustomUserManager(BaseUserManager):
     """
@@ -8,24 +9,25 @@ class CustomUserManager(BaseUserManager):
     
     """
     
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, email, username, password, **extra_fields):
         
         if not email:
-            return ValueError("The email must be needed")
+            raise ValueError("The email must be needed")
         email = self.normalize_email(email)
-        user = self.model(email= email, **extra_fields)
+        user = self.model(email= email, username=username, **extra_fields)
         user.set_password(password)
+        user.otp = str(random.randint(100000, 999999))
         user.save(using=self._db)
         
         return user
         
-    def create_superuser(self, email, password, **extra_fileds):
+    def create_superuser(self, email,username, password = None, **extra_fileds):
         """
             Create a superuser with the email , username and password 
             who can access the admin panel
         """
         
-        user = self.create_user(email, password = password)
+        user = self.create_user(email,username, password)
         user.is_staff = True
         user.is_admin = True
         user.is_superuser = True
@@ -43,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     # data_joined = models.DateTimeField(auto_now_add=True)
+    otp = models.CharField(max_length=6, null=True, blank=True)
     
     objects = CustomUserManager()
     
@@ -50,4 +53,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["username"]
     
     def __str__(self):
-        return f"{self.email}"
+        return f"{self.username}"

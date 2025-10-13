@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
-from .serializer import UserSerializer
+from .serializer import UserSerializer, RegistrationSerializer
 from .models import User
 from .forms import UserRegistrationForm
 # Create your views here.
@@ -31,5 +31,18 @@ def UserRegistration(request):
         user_registraton = UserRegistrationForm()
         
         return render(request, "register.html", {"form": user_registraton})
+    
+    
+class UserRegistrationView(APIView):
+    
+    def post(self, request):
+        
+        serializer = RegistrationSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response(serializer.data)
+
+        return Response(serializer.errors)
     
     
