@@ -23,7 +23,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
             username = validated_data.get('username'),
             password = validated_data.get('password')
         )
-        
         print(f"OTP for{user.email} : {user.otp}")
         
         return user
+    
+class VerifyOtpSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)

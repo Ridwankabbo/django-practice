@@ -28,6 +28,7 @@ class CustomUserManager(BaseUserManager):
         """
         
         user = self.create_user(email,username, password)
+        user.is_active = True
         user.is_staff = True
         user.is_admin = True
         user.is_superuser = True
@@ -40,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     username = models.CharField(max_length=200)
     email = models.EmailField(verbose_name="email address", max_length=100, unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
