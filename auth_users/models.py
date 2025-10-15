@@ -1,6 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 import random
+from django.conf  import settings
+from django.utils.translation import gettext_lazy as _
+
 # Create your models here.
 class CustomUserManager(BaseUserManager):
     """
@@ -16,7 +19,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email= email, username=username, **extra_fields)
         user.set_password(password)
-        user.otp = str(random.randint(100000, 999999))
+        # user.otp = str(random.randint(100000, 999999))
         user.save(using=self._db)
         
         return user
@@ -47,6 +50,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     # data_joined = models.DateTimeField(auto_now_add=True)
     otp = models.CharField(max_length=6, null=True, blank=True)
+    
+    
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name=_('groups'),
+        blank=True,
+        related_name="custom_user_groups",
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name=_('user permissions'),
+        blank=True,
+        related_name="custom_user_permissions",
+    )
     
     objects = CustomUserManager()
     

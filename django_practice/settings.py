@@ -74,6 +74,8 @@ TEMPLATES = [
 # 🔑 CRITICAL: Tell Django to use your CustomUser model
 AUTH_USER_MODEL = 'auth_users.User'
 
+#Configure your email settings hear
+
 
 
 WSGI_APPLICATION = 'django_practice.wsgi.application'

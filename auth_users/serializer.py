@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User
+from .utils import generate_otp, send_verification_mail
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -23,6 +24,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
             username = validated_data.get('username'),
             password = validated_data.get('password')
         )
+        verification_code = generate_otp()
+        user.otp = verification_code
+        user.save()
+        
+        send_verification_mail(user, verification_code)
+        
         print(f"OTP for{user.email} : {user.otp}")
         
         return user
