@@ -42,5 +42,13 @@ class VerifyOtpSerializer(serializers.Serializer):
 class ResendOtpSerializer(serializers.Serializer):
     email = serializers.EmailField()
     
+    
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    
 
+class ChangePasswordSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    otp = serializers.CharField(max_length=6)
+    password = serializers.CharField()
     

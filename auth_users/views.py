@@ -5,7 +5,9 @@ from .serializer import (
     UserSerializer,
     RegistrationSerializer,
     VerifyOtpSerializer,
-    ResendOtpSerializer
+    ResendOtpSerializer,
+    ForgotPasswordSerializer,
+    ChangePasswordSerializer
 )
 from .models import User
 from .forms import UserRegistrationForm
@@ -125,6 +127,61 @@ class ResendOtpView(APIView):
                 return Response({"message":"User not found"})
         
         return Response(serializer.errors)
+    
+class ForgotPasswordView(APIView):
+    
+    def post(self, request):
+        serializer = ForgotPasswordSerializer(data = request.data)
+        
+        if serializer.is_valid():
+            
+            email = serializer.validated_data.get('email')
+            
+            try:
+                user = User.objects.get(email = email)
+                new_otp = generate_otp()
+                user.otp = new_otp
+                user.save()
+                
+                print(f"User Email: {user.email} and OTP is : {user.otp}")
+                
+                return Response({"message":"A OTP send to your mail. Please check and enter the OTP."})
+            
+            except User.DoesNotExist:
+                
+                return Response({"message":"User doesn't exist"})
+        
+        return Response(serializer.errors)
+            
+            
+class ChangePasswordView(APIView):
+    
+    def post(self, request):
+        
+        serializer = ChangePasswordSerializer(data = request.data)
+        
+        if serializer.is_valid():
+            email = serializer.validated_data.get('email')
+            otp = serializer.validated_data.get('otp')
+            passwod = serializer.validated_data.get('password')
+            
+            if email and otp and passwod:
+                
+                try:
+                    user = User.objects.get(email= email)
+                    if user.otp == otp:
+                        user.set_password(passwod)
+                        user.otp = None
+                        user.save()
+                        
+                        print(f"Email {user.email},\npassword{user.password}\nand otp {user.otp}")
+                        
+                        return Response({"message":"Passwod changes successfully"})
+                        
+                except User.DoesNotExist:
+                    return Response({"message":"User doesn't exist"})
+                
+         
             
 
     
