@@ -8,3 +8,4 @@
 
 - In the settings.py file just enter your email cerdentials 
 - Then hit the urls endpoints in post to create user 
+- Resend OTP for new OTP

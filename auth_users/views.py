@@ -4,11 +4,13 @@ from rest_framework.response import Response
 from .serializer import (
     UserSerializer,
     RegistrationSerializer,
-    VerifyOtpSerializer
+    VerifyOtpSerializer,
+    ResendOtpSerializer
 )
 from .models import User
 from .forms import UserRegistrationForm
 from django.contrib.auth import get_user_model
+from .utils import generate_otp
 # Create your views here.
 
 User = get_user_model()
@@ -42,7 +44,7 @@ def UserRegistration(request):
         
         return render(request, "register.html", {"form": user_registraton})
     
-    #................................ End Registration view ......................................
+    #................................ End Registration view ...................................
 """
 
 
@@ -60,10 +62,10 @@ class UserRegistrationView(APIView):
 
         return Response(serializer.errors)
 
-#............................ End Register View ....................................
+#.............................. End Register View ....................................
 
 
-# .................... Verify Otp view ..................................
+# ............................. Verify Otp view ..................................
 
 class VerifyOtpView(APIView):
 
@@ -88,10 +90,41 @@ class VerifyOtpView(APIView):
             except User.DoesNotExist:
                 
                 return Response({"message":"User doesn't exist"})
-                
         
         return Response(serializer.errors, status=400)
+    
+    
+"""
+    ========================
+        Resend opt View 
+    ========================
+"""
 
-
+class ResendOtpView(APIView):
+    
+    def post(slef, request):
+        serializer = ResendOtpSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            email = serializer.validated_data.get('email')
+            
+            print(email)
+            
+            try:
+                user = User.objects.get(email=email)
+                new_otp = generate_otp()
+                user.otp = new_otp
+                user.save()
+                
+                print(f"Email: {user.email} and OTP : {user.otp}")
+                
+                return Response({"message":"OTP resend successfully. check email"})
+                
+            except User.DoesNotExist:
+                
+                return Response({"message":"User not found"})
+        
+        return Response(serializer.errors)
+            
 
     

@@ -37,3 +37,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class VerifyOtpSerializer(serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.CharField(max_length=6)
+    
+    
+class ResendOtpSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    
+
+    
