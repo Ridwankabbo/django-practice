@@ -7,11 +7,12 @@ from .serializer import (
     VerifyOtpSerializer,
     ResendOtpSerializer,
     ForgotPasswordSerializer,
-    ResetPasswordSerializer
+    ResetPasswordSerializer,
+    LoginSerializer
 )
 from .models import User
 from .forms import UserRegistrationForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from .utils import generate_otp
 # Create your views here.
 
@@ -65,6 +66,36 @@ class UserRegistrationView(APIView):
         return Response(serializer.errors)
 
 #.............................. End Register View ....................................
+
+
+
+"""
+    =================================
+            Login View
+    =================================
+"""
+
+class LoginView(APIView):
+    
+    def post(self, request):
+        serializer = LoginSerializer(data = request.data)
+        
+        if serializer.is_valid():
+            email = serializer.validated_data.get('email')
+            password = serializer.validated_data.get('password')
+            
+            user = authenticate(request, username=email, password=password)
+            
+            if user is not None:
+                if user.is_active:
+                    print("*************** login successfull **********************")
+                    return Response({"message":"Login successfull"})
+                
+                return Response({"message":"User is not active"})
+            
+            return Response({"message": "User is not registeted"})
+        
+                    
 
 
 # ............................. Verify Otp view ..................................
@@ -160,30 +191,28 @@ class ResetPasswordView(APIView):
         
         serializer = ResetPasswordSerializer(data = request.data)
         
+        print(serializer)
+        
         if serializer.is_valid():
             email = serializer.validated_data.get('email')
             otp = serializer.validated_data.get('otp')
             passwod = serializer.validated_data.get('password')
-            
-            if email and otp and passwod:
                 
-                print(email, otp, passwod)
+            print(email, otp, passwod)
                 
-                try:
-                    user = User.objects.get(email= email)
-                    if user.otp == otp:
-                        user.set_password(passwod)
-                        user.otp = None
-                        user.save()
+            try:
+                user = User.objects.get(email= email)
+                if user.otp == otp:
+                    user.set_password(passwod)
+                    user.otp = None
+                    user.save()
                         
-                        print(f"Email {user.email},\npassword{user.password}\nand otp {user.otp}")
+                    print(f"Email {user.email},\npassword{user.password}\nand otp {user.otp}")
                         
-                        return Response({"message":"Passwod changes successfully"})
+                    return Response({"message":"Passwod changes successfully"})
                         
-                except User.DoesNotExist:
-                    return Response({"message":"User doesn't exist"})
-            
-            return Response({"message":"Enter email, otp and password"})
+            except User.DoesNotExist:
+                return Response({"message":"User doesn't exist"})
         
         return Response(serializer.errors)
                 

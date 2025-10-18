@@ -40,6 +40,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         
         return user
     
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    
 class VerifyOtpSerializer(serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.CharField(max_length=6)
