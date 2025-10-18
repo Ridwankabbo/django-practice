@@ -7,7 +7,7 @@ from .serializer import (
     VerifyOtpSerializer,
     ResendOtpSerializer,
     ForgotPasswordSerializer,
-    ChangePasswordSerializer
+    ResetPasswordSerializer
 )
 from .models import User
 from .forms import UserRegistrationForm
@@ -154,11 +154,11 @@ class ForgotPasswordView(APIView):
         return Response(serializer.errors)
             
             
-class ChangePasswordView(APIView):
+class ResetPasswordView(APIView):
     
     def post(self, request):
         
-        serializer = ChangePasswordSerializer(data = request.data)
+        serializer = ResetPasswordSerializer(data = request.data)
         
         if serializer.is_valid():
             email = serializer.validated_data.get('email')
@@ -166,6 +166,8 @@ class ChangePasswordView(APIView):
             passwod = serializer.validated_data.get('password')
             
             if email and otp and passwod:
+                
+                print(email, otp, passwod)
                 
                 try:
                     user = User.objects.get(email= email)
@@ -180,6 +182,10 @@ class ChangePasswordView(APIView):
                         
                 except User.DoesNotExist:
                     return Response({"message":"User doesn't exist"})
+            
+            return Response({"message":"Enter email, otp and password"})
+        
+        return Response(serializer.errors)
                 
          
             

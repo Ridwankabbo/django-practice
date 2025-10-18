@@ -24,11 +24,17 @@ class RegistrationSerializer(serializers.ModelSerializer):
             username = validated_data.get('username'),
             password = validated_data.get('password')
         )
-        verification_code = generate_otp()
-        user.otp = verification_code
-        user.save()
         
-        send_verification_mail(user, verification_code)
+        try:
+            verification_code = generate_otp()
+            user.otp = verification_code
+            user.save()
+        except AttributeError:
+            raise serializers.ValidationError(
+                {"detail":"User model configuration error: 'otp' field not found."}
+            )
+        
+        # send_verification_mail(user, verification_code)
         
         print(f"OTP for{user.email} : {user.otp}")
         
@@ -47,7 +53,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.CharField()
     
 
-class ChangePasswordSerializer(serializers.Serializer):
+class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.CharField()
     otp = serializers.CharField(max_length=6)
     password = serializers.CharField()

@@ -7,5 +7,5 @@ urlpatterns = [
     path('verify-opt/', views.VerifyOtpView.as_view(), name="verify-opt"),
     path('resend-opt/', views.ResendOtpView.as_view(), name="resend-otp"),
     path('forgot-password/', views.ForgotPasswordView.as_view(), name="forgot-password"),
-    path('change-password/', views.ChangePasswordView.as_view(), name='change-password')
+    path('reset-password/', views.ResetPasswordView.as_view(), name='reset-password')
 ]
