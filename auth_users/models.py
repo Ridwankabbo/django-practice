@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 import random
 from django.conf  import settings
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -72,3 +73,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return f"{self.username}"
+    
+    
+class UserProfile(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.CASCADE, related_name="profile")
+    avatat = models.ImageField(upload_to='avaters/', null=True, blank=True)
+    bio = models.TextField(null=True)
+    phone = models.CharField(null=True, max_length=12)
