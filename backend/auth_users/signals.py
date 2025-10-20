@@ -7,19 +7,23 @@ from .models import UserProfile
 user = settings.AUTH_USER_MODEL 
 
 @receiver(post_save, sender= user)
-def created_user_profile(sender, instence, created, **kwargs):
+def created_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(User= instence)
+        UserProfile.objects.create(user= instance)
+        
+        print(f"User profile created. name{instance.username}")
+    else:
+        print(f"User profile successfully update. name {instance.username}")
         
      
 @receiver(post_save, sender=user)   
-def save_user_profile(sender, instence, **kwargs):
+def save_user_profile(sender, instance, **kwargs):
     
     try:
-        if not hasattr(instence, "profile"):
-            UserProfile.objects.create(user=instence)
+        if not hasattr(instance, "profile"):
+            UserProfile.objects.create(user=instance)
         else:
-            instence.profile.save()
+            instance.profile.save()
     except:
         pass
     

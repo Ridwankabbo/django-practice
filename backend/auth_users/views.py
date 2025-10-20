@@ -29,6 +29,18 @@ class UsersApi(APIView):
         
         return Response(serializer.data)
     
+    def patch(self, request):
+        data = request.data
+        
+        user = User.objects.get(id=data['id'])
+        serializer = UserSerializer(user, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response(serializer.data)
+        
+        return Response(serializer.errors)
+    
     
 """
     ======================
@@ -66,8 +78,11 @@ def UserRegistration(request):
 """
 
 
-# ........................... Start new Register view .............................
-    
+""" 
+    ..............................
+        Start new Register view
+    ..............................
+"""
 class UserRegistrationView(APIView):
     
     def post(self, request):
@@ -80,14 +95,18 @@ class UserRegistrationView(APIView):
 
         return Response(serializer.errors)
 
-#.............................. End Register View ....................................
+""" 
+    ..............................
+        End Register View 
+    ..............................
+"""
 
 
 
 """
-    =================================
+    ////////////////////////////////
             Login View
-    =================================
+    ////////////////////////////////
 """
 
 class LoginView(APIView):
@@ -113,7 +132,7 @@ class LoginView(APIView):
                     
 
 
-# ............................. Verify Otp view ..................................
+""" ............................. Verify Otp view .................................."""
 
 class VerifyOtpView(APIView):
 
@@ -141,13 +160,13 @@ class VerifyOtpView(APIView):
         
         return Response(serializer.errors, status=400)
     
+""" ............................. End Verify Otp view .................................."""
     
 """
     ========================
         Resend opt View 
     ========================
 """
-
 class ResendOtpView(APIView):
     
     def post(slef, request):
@@ -174,6 +193,12 @@ class ResendOtpView(APIView):
         
         return Response(serializer.errors)
     
+    
+"""
+    ============================
+        Forgot password view
+    ============================
+"""
 class ForgotPasswordView(APIView):
     
     def post(self, request):
@@ -199,7 +224,11 @@ class ForgotPasswordView(APIView):
         
         return Response(serializer.errors)
             
-            
+""" 
+    ==================================
+        Reset password view 
+    ==================================
+"""
 class ResetPasswordView(APIView):
     
     def post(self, request):
