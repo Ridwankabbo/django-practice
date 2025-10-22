@@ -8,6 +8,7 @@ import VerifyOtp from './VerifyOtp'
 import Login from './Login'
 import ResetPasswordVerify from './ResetPassword'
 import Dashboard from './Daslhoard'
+import DashboardLayout from './layouts/DashboardLayout'
 
 function App() {
   
@@ -22,7 +23,9 @@ function App() {
             <Route path='/verify-otp' element={<VerifyOtp/>}/>
             <Route path='/login' element={<Login/>}/>
             <Route path='/reset-password-verify' element={<ResetPasswordVerify/>}/> 
-            <Route path='/dashboard' element={<Dashboard/>}/> 
+          </Route>
+          <Route path='/dashboard' element={<DashboardLayout/>}>
+            <Route index element={<Dashboard/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

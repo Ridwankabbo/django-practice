@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const LOGIN_API = 'http://192.168.1.104:8000/auth-users/login-user/';
-const FORGOT_PASSWORD_API = 'http://192.168.1.104:8000/auth-users/forgot-password/';
+const LOGIN_API = 'http://localhost:8000/auth-users/login-user/';
+const FORGOT_PASSWORD_API = 'http://localhost:8000/auth-users/forgot-password/';
 
 export default function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' });
