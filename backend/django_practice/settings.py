@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'api_practice',
     'auth_users',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'ecommerce'
 ]
 
 MIDDLEWARE = [
