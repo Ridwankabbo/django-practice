@@ -23,7 +23,7 @@ from .serializers import (
         Custommer Api View
     ==========================
 """
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def CustommerApiView(request):
     
     if request.method == "GET":
@@ -85,7 +85,8 @@ def ProductApiView(request):
         if serializer.is_valid():
             serializer.save()
             
-            return
+            return Response(serializer.data)
+        return Response(serializer.errors)
         
 
 """ 
@@ -93,7 +94,7 @@ def ProductApiView(request):
         Order Api View
     ==========================
 """
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def OrderApiView(request):
     
     if request.method == "GET":
@@ -116,7 +117,7 @@ def OrderApiView(request):
         Order Items Api View
     ===========================
 """
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def OrderItemsApiView(request):
     if request.method == "GET":
         itmes = OrderItem.objects.all()
