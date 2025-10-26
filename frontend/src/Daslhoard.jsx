@@ -57,7 +57,7 @@ export default function Dashboard() {
     // --- Navigation ---
     const goToOrderPage = () => {
         // Pass the cart items via state to the Order page
-        navigate('/order-summary', { state: { cartItems: cartItems } });
+        navigate('dashboard/order-summary', { state: { cartItems: cartItems } });
     };
 
     return (

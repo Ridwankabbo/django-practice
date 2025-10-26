@@ -9,6 +9,7 @@ import Login from './Login'
 import ResetPasswordVerify from './ResetPassword'
 import Dashboard from './Daslhoard'
 import DashboardLayout from './layouts/DashboardLayout'
+import OrderSummary from './OrderSummary'
 
 function App() {
   
@@ -19,13 +20,14 @@ function App() {
         <Routes>
           <Route path='/' element={<Layout/>}>
             <Route index element={<Home/>}/>
-            <Route path='/registration' element={<Registration/>}/>
-            <Route path='/verify-otp' element={<VerifyOtp/>}/>
-            <Route path='/login' element={<Login/>}/>
-            <Route path='/reset-password-verify' element={<ResetPasswordVerify/>}/> 
+            <Route path='registration' element={<Registration/>}/>
+            <Route path='verify-otp' element={<VerifyOtp/>}/>
+            <Route path='login' element={<Login/>}/>
+            <Route path='reset-password-verify' element={<ResetPasswordVerify/>}/> 
           </Route>
           <Route path='/dashboard' element={<DashboardLayout/>}>
             <Route index element={<Dashboard/>}/>
+            <Route path={"dashboard/order-summary"} element={<OrderSummary/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
