@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-export default function Card({ name, image, price }) {
+// ProductCard receives the product data and the function to update the cart
+export default function ProductCard({ product, onAddToCart, img }) {
     return (
-        <>
-            <div className="p-3 flex flex-col gap-5 items-center bg-white m-5 rounded-xl">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold">{name}</h2>
-                    <img src={`http://localhost:8000/${image}`} alt="image" className="rounded-xl" />
-                    <h5>Price:{price}</h5>
-
-                </div>
-                <div>
-                    <button className="px-6 py-3 bg-yellow-500 text-white rounded-sm">Buy</button>
-                </div>
-            </div>
-        </>
-    )
+        <div className="bg-white p-4 shadow-lg rounded-lg flex flex-col items-center">
+            <h3 className="text-xl font-semibold">{product.name}</h3>
+            <img src={`http://localhost:8000/${img}`} alt="" />
+            <p className="text-gray-600">Price: ${product.price}</p>
+            {/*  */}
+            <button 
+                onClick={() => onAddToCart(product)}
+                className="mt-3 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200"
+            >
+                Add to Cart
+            </button>
+        </div>
+    );
 }

@@ -1,53 +1,99 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Card from "./layouts/Card";
+import { Link, useNavigate } from "react-router-dom";
+import ProductCard from "./layouts/Card"; // Renamed Card to ProductCard for clarity
 
 export default function Dashboard() {
-    const Products_URL = 'http://localhost:8000/e-commerce/products/'
-    const [productData, setProductData] = useState(null)
+    const navigate = useNavigate();
+    const BASE_PRODUCTS_URL = 'http://localhost:8000/e-commerce/products/';
+    const [productData, setProductData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    
+    // CART STATE: Stores the items selected by the user
+    const [cartItems, setCartItems] = useState({}); 
 
+    // --- Data Fetching Logic (Same as before) ---
     useEffect(() => {
-        const handleProducts = async (e) => {
-            try {
-                const responce = await fetch(Products_URL, {
-                    method: "GET",
-                    // headers: {'Context-Type':'applicaton/json'}
-                });
-
-
-                if (responce.ok) {
-                    const result = await responce.json();
-                    console.log(result);
-
-                    setProductData(result)
-                }
-                else {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-            }
-            catch (error) {
-                console.error('Login error:', error);
-                alert('A network error occurred during login.');
-            }
+        setLoading(true);
+        let fetchUrl = BASE_PRODUCTS_URL;
+        if (selectedCategory) {
+            fetchUrl = `${BASE_PRODUCTS_URL}?catagory=${selectedCategory}`;
         }
+        
+        const handleProducts = async () => {
+            // ... (Your existing fetch logic) ...
+            try {
+                const response = await fetch(fetchUrl);
+                const result = await response.json();
+                setProductData(result);
+            } catch (error) {
+                console.error('Fetch error:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
         handleProducts();
-    }, [])
-    return (
-        <>
-            <section className="grid grid-cols-6 py-5">
-                <div className="flex flex-col gap-5  bg-green-700 text-center text-white">
-                    <Link to={'electronic/'}>Electronic</Link>
-                    <Link to={'food/'}>Food</Link>
-                    <Link to={'car/'}>Car</Link>
+    }, [selectedCategory]); 
 
-                </div>
-                <div className="col-span-5 bg-stone-100 flex gap-10 flex-wrap">
-                    {/* {JSON.stringify(productData, null, 2)} */}
-                    {productData && productData.map((item, index)=>(
-                        <Card key={item.id || index} name={item.name} image={item.image} price={item.price}/>
-                    ))}
-                </div>
-            </section>
-        </>
-    )
+    // --- Cart Management Functions ---
+    const handleAddToCart = (product) => {
+        setCartItems(prevCart => {
+            const productId = product.id;
+            
+            // Create a new cart object with updated quantity
+            return {
+                ...prevCart,
+                [productId]: {
+                    ...product, // Store full product info (name, price)
+                    quantity: (prevCart[productId]?.quantity || 0) + 1
+                }
+            };
+        });
+    };
+
+    // Calculate total quantity of items in the cart (for display)
+    const totalItems = Object.values(cartItems).reduce((sum, item) => sum + item.quantity, 0);
+
+    // --- Navigation ---
+    const goToOrderPage = () => {
+        // Pass the cart items via state to the Order page
+        navigate('/order-summary', { state: { cartItems: cartItems } });
+    };
+
+    return (
+        <section className="grid grid-cols-6 py-5">
+            {/* Sidebar for Category Selection and Cart Summary */}
+            <div className="flex flex-col gap-5 bg-green-700 text-center text-white p-4">
+                {/* Category buttons here... */}
+                
+                <h3 className="text-2xl mt-10">🛒 Cart Summary</h3>
+                <p className="text-lg">Total Items: {totalItems}</p>
+                
+                {totalItems > 0 && (
+                    <button 
+                        onClick={goToOrderPage}
+                        className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded transition duration-200"
+                    >
+                        Proceed to Order ({totalItems})
+                    </button>
+                )}
+            </div>
+
+            {/* Product Display Area */}
+            <div className="col-span-5 bg-stone-100 p-4 grid grid-cols-3 gap-4">
+                {loading ? (
+                    <div>Loading products...</div>
+                ) : (
+                    productData.map((item) => (
+                        <ProductCard 
+                            key={item.id} 
+                            product={item}
+                            img={item.image}
+                            onAddToCart={handleAddToCart}
+                        />
+                    ))
+                )}
+            </div>
+        </section>
+    );
 }
