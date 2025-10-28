@@ -19,7 +19,7 @@ class Catagory(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='e-commerce/products/', null=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
     catagory = models.ForeignKey(Catagory, on_delete=models.CASCADE, related_name="product")
     
     def __str__(self):
