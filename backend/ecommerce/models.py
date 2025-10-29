@@ -27,9 +27,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-# class ProductDetails(models.Model):
-#     product = models.ForeignKey(Product, models.CASCADE, related_name='product')
-#     product_description = models.TextField()
+class ProductDetails(models.Model):
+    product = models.ForeignKey(Product, models.CASCADE, related_name='product')
+    product_description = models.TextField()
     
     
 class Order(models.Model):

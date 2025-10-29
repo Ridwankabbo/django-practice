@@ -87,6 +87,20 @@ def ProductApiView(request):
             
             return Response(serializer.data)
         return Response(serializer.errors)
+    
+""" 
+    ===============================
+        Product by catagory
+    ===============================
+"""
+@api_view(['GET'])
+def ProductByCatagoryView(request, catagory_name):
+    if request.method == 'GET':
+       catagory_instance = Catagory.objects.filter(name=catagory_name)
+       products = Product.objects.get(catagory=catagory_instance['id'])
+       serializer = ProductSerializer(products, many=True)    
+
+       return Response(serializer.data)
         
 
 """ 
