@@ -2,20 +2,26 @@ from rest_framework import serializers
 from .models import User, UserProfile
 from .utils import generate_otp, send_verification_mail
 
+from django.contrib.auth import get_user_model
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = "__all__"
-        
+
 
 class UserSerializer(serializers.ModelSerializer):
     
-    user = UserProfileSerializer
     class Meta:
         model = User
         fields = "__all__"
+        
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = UserProfile
+        fields = "__all__"
         depth = 1
+        
+
+
 
         
 class RegistrationSerializer(serializers.ModelSerializer):

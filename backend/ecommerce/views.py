@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.decorators import  api_view
 from rest_framework.response import Response
+from auth_users.models import UserProfile
 from .models import (
-    Custommer,
     Catagory,
     Product,
     Order, 
@@ -27,18 +27,18 @@ from .serializers import (
 def CustommerApiView(request):
     
     if request.method == "GET":
-        custommer = Custommer.objects.all()
+        custommer = UserProfile.objects.all()
         serializer = CustommerSerializer(custommer, many=True)
         
         return Response(serializer.data)
     
-    if request.method == "POST":
-        serializer = CustommerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+    # if request.method == "POST":
+    #     serializer = CustommerSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
             
-            return Response(serializer.data)
-        return Response(serializer.errors)
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors)
         
 """ 
     ==========================

@@ -54,6 +54,11 @@ class UserProfileView(APIView):
         serializer = UserProfileSerializer(data, many=True)
         
         return Response(serializer.data)
+    
+    def patch(self, request):
+        data = request.data
+        
+        # user = UserProfile.objects.get(user=data['id'])
 
 
 """

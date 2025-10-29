@@ -1,14 +1,16 @@
 from django.db import models
+from django.conf import settings
+from auth_users.models import UserProfile
 
 # Create your models here.
 
-class Custommer(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15)
+# class Custommer(models.Model):
+#     name = models.CharField(max_length=100)
+#     email = models.EmailField()
+#     phone = models.CharField(max_length=15)
     
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 class Catagory(models.Model):
     name = models.CharField(max_length=100)
@@ -25,8 +27,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+# class ProductDetails(models.Model):
+#     product = models.ForeignKey(Product, models.CASCADE, related_name='product')
+#     product_description = models.TextField()
+    
+    
 class Order(models.Model):
-    custommer = models.ForeignKey(Custommer, on_delete=models.CASCADE, related_name='orders')
+    custommer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

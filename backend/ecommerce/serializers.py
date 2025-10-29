@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from .models import Custommer, Catagory, Product, Order, OrderItem
+from .models import  Catagory, Product, Order, OrderItem
+from auth_users.models import UserProfile
 
 class CustommerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Custommer
+        model = UserProfile
         fields = '__all__'
         
 class CatagorySerializer(serializers.ModelSerializer):
