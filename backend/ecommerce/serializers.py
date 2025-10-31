@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import  Catagory, Product, Order, OrderItem
+from .models import  Catagory, Product, Order, OrderItem, ProductDetails
 from auth_users.models import UserProfile
 
 class CustommerSerializer(serializers.ModelSerializer):
@@ -13,10 +13,25 @@ class CatagorySerializer(serializers.ModelSerializer):
         fields = ['name']
         
 class ProductSerializer(serializers.ModelSerializer):
+    catagory = CatagorySerializer(read_only=True)
+    catagory_id = serializers.PrimaryKeyRelatedField(
+        queryset = Catagory.objects.all(),
+        source = 'catagory',
+        write_only = True
+    )
+    
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'name', 'image', 'price', 'catagory', 'catagory_id']
+        depth =1  
         
+class ProductDetailsSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    
+    class Meta:
+        model = ProductDetails
+        fields = '__all__'
+        depth = 1  
     
         
 class OrderSerializer(serializers.ModelSerializer):
@@ -25,7 +40,10 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class OrderItemSerializer(serializers.ModelSerializer):
+    order = OrderSerializer()
+    products = ProductSerializer()
     class Meta:
         model = OrderItem
         fields = '__all__'
+        depth=1
         

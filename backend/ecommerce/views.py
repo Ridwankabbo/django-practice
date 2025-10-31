@@ -6,14 +6,16 @@ from .models import (
     Catagory,
     Product,
     Order, 
-    OrderItem
+    OrderItem,
+    ProductDetails
 )
 from .serializers import (
     CustommerSerializer,
     CatagorySerializer,
     ProductSerializer,
     OrderSerializer,
-    OrderItemSerializer
+    OrderItemSerializer,
+    ProductDetailsSerializer
 )
 
 # Create your views here.
@@ -65,7 +67,7 @@ def CatagroyApiView(request):
 def ProductApiView(request):
     
     if request.method == 'GET':
-        
+        # catagory_instance = Catagory.objects.get(name__iexact=catagory)
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         
@@ -88,6 +90,13 @@ def ProductApiView(request):
             return Response(serializer.data)
         return Response(serializer.errors)
     
+@api_view(['GET'])
+def ProductDetailsView(request):
+    if request.method == "GET":
+        products_details = ProductDetails.objects.all()
+        serializer = ProductDetailsSerializer(products_details, many=True)
+        
+        return Response(serializer.data)
 """ 
     ===============================
         Product by catagory
@@ -96,8 +105,8 @@ def ProductApiView(request):
 @api_view(['GET'])
 def ProductByCatagoryView(request, catagory_name):
     if request.method == 'GET':
-       catagory_instance = Catagory.objects.filter(name=catagory_name)
-       products = Product.objects.get(catagory=catagory_instance['id'])
+       catagory_instance = Catagory.objects.get(name=catagory_name)
+       products = Product.objects.filter(catagory=catagory_instance)
        serializer = ProductSerializer(products, many=True)    
 
        return Response(serializer.data)
