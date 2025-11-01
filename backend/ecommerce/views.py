@@ -105,7 +105,7 @@ def ProductDetailsView(request, id):
             print(product)
             products_details = ProductDetails.objects.get(product= product)
             print(products_details)
-            serializer = ProductDetailsSerializer(products_details, many=True)
+            serializer = ProductDetailsSerializer(products_details)
         
             return Response(serializer.data)
         except Product.DoesNotExist:
