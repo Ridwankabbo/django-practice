@@ -29,7 +29,10 @@ class Product(models.Model):
     
 class ProductDetails(models.Model):
     product = models.ForeignKey(Product, models.CASCADE, related_name='product')
-    product_description = models.TextField()
+    product_description = models.TextField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.product.name
     
     
 class Order(models.Model):

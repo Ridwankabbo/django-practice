@@ -90,13 +90,26 @@ def ProductApiView(request):
             return Response(serializer.data)
         return Response(serializer.errors)
     
+"""
+    ==================================
+        Product Deatils View
+    ==================================
+"""
+    
 @api_view(['GET'])
-def ProductDetailsView(request):
+def ProductDetailsView(request, id):
     if request.method == "GET":
-        products_details = ProductDetails.objects.all()
-        serializer = ProductDetailsSerializer(products_details, many=True)
+        try:
+            
+            product = Product.objects.get(id=id)
+            print(product)
+            products_details = ProductDetails.objects.get(product= product)
+            print(products_details)
+            serializer = ProductDetailsSerializer(products_details, many=True)
         
-        return Response(serializer.data)
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            return Response(serializer.errors)
 """ 
     ===============================
         Product by catagory
