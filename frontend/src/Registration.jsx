@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const API_ENDPOINT = 'http://192.168.1.104:8000/auth-users/register-user/';
+const API_ENDPOINT = 'http://localhost:8000/auth-users/register-user/';
 
 export default function Registration() {
     // return(

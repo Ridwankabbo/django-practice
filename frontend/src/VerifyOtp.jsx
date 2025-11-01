@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Replace with your actual OTP verification endpoint
-const VERIFY_OTP_ENDPOINT = 'http://192.168.1.104:8000/auth-users/verify-opt/'; 
+const VERIFY_OTP_ENDPOINT = 'http://localhost:8000/auth-users/verify-opt/'; 
 
 export default function VerifyOtp() {
     const [email, setEmail] = useState('')

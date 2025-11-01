@@ -10,6 +10,7 @@ import ResetPasswordVerify from './ResetPassword'
 import Dashboard from './Daslhoard'
 import DashboardLayout from './layouts/DashboardLayout'
 import OrderSummary from './OrderSummary'
+import AddToCart from './AddToCart'
 
 function App() {
   
@@ -27,7 +28,8 @@ function App() {
           </Route>
           <Route path='/dashboard' element={<DashboardLayout/>}>
             <Route index element={<Dashboard/>}/>
-            <Route path={"dashboard/order-summary"} element={<OrderSummary/>}/>
+            <Route path={'add_to_cart'} element={<AddToCart/>}/>
+            <Route path={"order-summary"} element={<OrderSummary/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

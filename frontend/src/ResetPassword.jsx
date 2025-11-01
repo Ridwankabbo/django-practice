@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const RESET_API = 'http://192.168.1.104:8000/auth-users/reset-password/';
+const RESET_API = 'http://localhost:8000/auth-users/reset-password/';
 
 export default function ResetPasswordVerify() {
     const navigate = useNavigate();
