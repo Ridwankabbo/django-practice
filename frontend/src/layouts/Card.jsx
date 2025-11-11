@@ -7,10 +7,12 @@ export default function ProductCard({ id, product, onAddToCart, img }) {
         <div className="bg-white p-2 shadow-lg rounded-lg flex flex-col items-center h-85">
             <Link to={`${id}/`}>
 
-                <h3 className="text-xl font-semibold pb-3">{product.name}</h3>
-                <img src={`http://localhost:8000/${img}`} alt="" className='rounded-md pb-3' />
-                <p className="text-gray-600">Price: ${product.price}</p>
-                
+                <div className='flex flex-col gap-2 items-center'>
+                    <h3 className="text-xl font-semibold pb-3 ">{product.name}</h3>
+                    <img src={`http://localhost:8000/${img}`} alt="" className='rounded-md pb-3' />
+                    <p className="text-gray-600">Price: ${product.price}</p>
+                </div>
+
             </Link>
             <button
                 onClick={() => onAddToCart(product)}

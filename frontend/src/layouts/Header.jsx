@@ -19,7 +19,7 @@ export default function Header(){
                     <Link to={'/'} className="py-3">Home</Link>
                     <Link to={'/registration'} className="bg-blue-500 text-white px-7 py-3 rounded-xl ">registratoin</Link>
                     <Link to={'/login'} className="bg-yellow-500 text-white px-7 py-3 rounded-xl">Login</Link>
-                    <Link to={'add_to_cart/'} className="bg-orange-500 px-7 py-3 rounded-xl">Cart</Link>
+                    <Link to={'add_to_cart'} className="bg-orange-500 px-7 py-3 rounded-xl">Cart</Link>
                     <Link t0={'/admin'} className="bg-red-500 text-white px-7 py-3 rounded-xl" onClick={handleRedirectAction}>Admin</Link>
                 </div>
             </section>
