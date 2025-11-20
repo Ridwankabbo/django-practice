@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from rest_framework.decorators import APIView, api_view
-from .models import Product, Catagory
-from .serializer import ProductSerializer, CatagorySerializer
+from .models import Product, Catagory, ProductsDetails, Order
+from .serializer import ProductSerializer, CatagorySerializer, ProductDetailsSerializer
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.viewsets import ViewSet
 # Create your views here.
 
 class Product_api_view(APIView):
@@ -47,6 +49,27 @@ class Product_api_view(APIView):
         product.delete()
         
         return Response({"Status": "Successfull"})
+    
+
+class ListProductDetails(ViewSet):
+    
+    def list(self, request):
+        queryset = ProductsDetails.objects.all()
+        serializer = ProductDetailsSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def creat(self, request):
+        queryset = ProductsDetails.objects.all()
+        serializer_class = ProductDetailsSerializer(queryset, many=True)
+        return Response(serializer_class.data)
+    
+class CatagoryListView(ViewSet):
+    
+    def list(self, request):
+        queryset= Catagory.objects.all()
+        serializer_class = CatagorySerializer(queryset, many=True)
+        return Response(serializer_class.data)
+    
     
 @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 def Catagory_api(request):
