@@ -13,6 +13,8 @@ export default function Dashboard() {
     // CART STATE: Stores the items selected by the user
     const [cartItems, setCartItems] = useState({});
 
+    // console.log("access Token: ",localStorage.getItem('accessToken'));
+    
     // --- Data Fetching Logic (Same as before) ---
     useEffect(() => {
         setLoading(true);

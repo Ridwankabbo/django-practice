@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const LOGIN_API = 'http://localhost:8000/auth-users/login-user/';
+const LOGIN_API = 'http://localhost:8000/api/token/';
 const FORGOT_PASSWORD_API = 'http://localhost:8000/auth-users/forgot-password/';
 
 export default function Login() {
@@ -17,6 +17,7 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        console.log(formData);
         
         // Basic check to ensure required fields are present
         if (!formData.email || !formData.password) {
@@ -31,16 +32,24 @@ export default function Login() {
                 body: JSON.stringify(formData),
             });
 
-            const result = await response.json();
-
             if (response.ok) {
                 // Assuming the backend returns a token/user data on success
                 // Save the authentication token (e.g., in localStorage)
-                // localStorage.setItem('authToken', result.token); 
+                // localStorage.setItem('authToken', result.token);
+                
+
+                const result = await response.json();
+                console.log(result);
+                
+                const accessToken = result.access;
+                localStorage.setItem('accessToken', accessToken);
+                const refresshToken = result.refresh;
+                
+                
                 alert("Login successful! Redirecting to dashboard.");
                 navigate('/dashboard'); // Redirect to your main app page
             } else {
-                alert(`Login failed: ${result.message || 'Invalid credentials.'}`);
+                alert(`Login failed: Invalid credentials.`);
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -62,9 +71,10 @@ export default function Login() {
                 body: JSON.stringify({ email: formData.email }),
             });
 
-            const result = await response.json();
+            
 
             if (response.ok) {
+                const result = await response.json();
                 alert("Password reset OTP sent to your email.");
                 // Store email locally to pre-fill the reset page
                 localStorage.setItem('resetEmail', formData.email); 
